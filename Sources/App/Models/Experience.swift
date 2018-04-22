@@ -14,8 +14,6 @@ final class Experience: Model {
 
     // MARK: Properties and database keys
 
-    static let idType: IdentifierType = .uuid
-
     var items: Children<Experience, Item> {
         return children()
     }

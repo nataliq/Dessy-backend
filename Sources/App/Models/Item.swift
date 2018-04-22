@@ -14,7 +14,6 @@ final class Item: Model {
 
     // MARK: Properties and database keys
 
-    static let idType: IdentifierType = .uuid
     var message: String
     var imageURL: String
     var ownerId: Identifier
@@ -44,7 +43,7 @@ final class Item: Model {
     init(row: Row) throws {
         message = try row.get(Item.Keys.message)
         imageURL = try row.get(Item.Keys.imageURL)
-        ownerId = try row.get(Item.Keys.ownerId)
+        ownerId = try row.get(Experience.foreignIdKey)
     }
 
     // Serializes the Post to the database
@@ -52,7 +51,7 @@ final class Item: Model {
         var row = Row()
         try row.set(Item.Keys.message, message)
         try row.set(Item.Keys.imageURL, imageURL)
-        try row.set(Item.Keys.ownerId, ownerId)
+        try row.set(Experience.foreignIdKey, ownerId)
         return row
     }
 }

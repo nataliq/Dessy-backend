@@ -8,22 +8,33 @@ extension Droplet {
             return json
         }
 
-        get("plaintext") { req in
-            return "Hello, world!"
-        }
-
-        // response to requests to /info domain
-        // with a description of the request
-        get("info") { req in
-            return req.description
-        }
-
         get("exp") { req in
-            let id = req.query?["id"]?.int
-            return req.description
+            let id = req.query?["id"]?.int ?? 0
+            let experience = try Experience.find(id)
+            if let json = try experience?.makeJSON() {
+                return json
+            } else {
+                return "Error"
+            }
         }
 
+        get("createfake") { req in
+            let experience = Experience()
+            try? experience.save()
+            let identifier = experience.id ?? Identifier.null
+            let itemA = Item(message: "Hey A", imageURL: "aa", ownerId: identifier)
+            let itemB = Item(message: "Hey B", imageURL: "bb", ownerId: identifier)
+            let itemC = Item(message: "Hey C", imageURL: "cc", ownerId: identifier)
+            do {
+                try itemA.save()
+                try itemB.save()
+                try itemC.save()
+            }
+            catch {
+                print("something is wrong")
+            }
+            return "fake id \(identifier.string)"
+        }
 
-        try resource("posts", PostController.self)
     }
 }
