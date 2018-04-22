@@ -14,16 +14,14 @@ final class Experience: Model {
 
     // MARK: Properties and database keys
 
-    var itemUUIDS: [String]
+    static let idType: IdentifierType = .uuid
 
     struct Keys {
         static let id = "id"
-        static let itemUUIDS = "itemuuids"
     }
 
     /// Creates a new Post
-    init(itemUUIDS: [String]) {
-        self.itemUUIDS = itemUUIDS
+    init() {
     }
 
     // MARK: Fluent Serialization
@@ -31,13 +29,11 @@ final class Experience: Model {
     /// Initializes the Post from the
     /// database row
     init(row: Row) throws {
-        itemUUIDS = try row.get(Experience.Keys.itemUUIDS)
     }
 
     // Serializes the Post to the database
     func makeRow() throws -> Row {
-        var row = Row()
-        try row.set(Experience.Keys.itemUUIDS, itemUUIDS)
+        let row = Row()
         return row
     }
 }
@@ -50,7 +46,6 @@ extension Experience: Preparation {
     static func prepare(_ database: Database) throws {
         try database.create(self) { builder in
             builder.id()
-            builder.string(Experience.Keys.itemUUIDS)
         }
     }
 
@@ -70,14 +65,12 @@ extension Experience: Preparation {
 extension Experience: JSONConvertible {
     convenience init(json: JSON) throws {
         self.init(
-            itemUUIDS: try json.get(Experience.Keys.itemUUIDS)
         )
     }
 
     func makeJSON() throws -> JSON {
         var json = JSON()
         try json.set(Experience.Keys.id, id)
-        try json.set(Experience.Keys.itemUUIDS, itemUUIDS)
         return json
     }
 }
@@ -88,21 +81,10 @@ extension Experience: JSONConvertible {
 // directly in route closures
 extension Experience: ResponseRepresentable { }
 
-// MARK: Update
 
-// This allows the Experience model to be updated
-// dynamically by the request.
-extension Experience: Updateable {
-    // Updateable keys are called when `post.update(for: req)` is called.
-    // Add as many updateable keys as you like here.
-    public static var updateableKeys: [UpdateableKey<Experience>] {
-        return [
-            // If the request contains a String at key "content"
-            // the setter callback will be called.
-            UpdateableKey(Experience.Keys.itemUUIDS, [String].self) { experience, itemUUIDS in
-                experience.itemUUIDS = itemUUIDS
-            }
-        ]
+extension Experience {
+    var items: Children<Experience, Item> {
+        return children()
     }
 }
 

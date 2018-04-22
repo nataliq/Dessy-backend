@@ -14,6 +14,7 @@ final class Item: Model {
 
     // MARK: Properties and database keys
 
+    static let idType: IdentifierType = .uuid
     var message: String
     var imageURL: String
 
@@ -114,5 +115,14 @@ extension Item: Updateable {
                 item.imageURL = imageURL
             }
         ]
+    }
+}
+
+extension Item {
+
+    static let experienceID: Identifier
+
+    var owner: Parent<Item, Experience> {
+        return parent(id: experienceID)
     }
 }
