@@ -17,17 +17,24 @@ final class Item: Model {
     static let idType: IdentifierType = .uuid
     var message: String
     var imageURL: String
+    var ownerId: Identifier
+
+    var owner: Parent<Item, Experience> {
+        return parent(id: ownerId)
+    }
 
     struct Keys {
         static let id = "id"
         static let message = "message"
         static let imageURL = "imageURL"
+        static let ownerId = "ownerId"
     }
 
     /// Creates a new Post
-    init(message: String, imageURL: String) {
+    init(message: String, imageURL: String, ownerId: Identifier) {
         self.message = message
         self.imageURL = imageURL
+        self.ownerId = ownerId
     }
 
     // MARK: Fluent Serialization
@@ -37,6 +44,7 @@ final class Item: Model {
     init(row: Row) throws {
         message = try row.get(Item.Keys.message)
         imageURL = try row.get(Item.Keys.imageURL)
+        ownerId = try row.get(Item.Keys.ownerId)
     }
 
     // Serializes the Post to the database
@@ -44,6 +52,7 @@ final class Item: Model {
         var row = Row()
         try row.set(Item.Keys.message, message)
         try row.set(Item.Keys.imageURL, imageURL)
+        try row.set(Item.Keys.ownerId, ownerId)
         return row
     }
 }
@@ -58,6 +67,7 @@ extension Item: Preparation {
             builder.id()
             builder.string(Item.Keys.message)
             builder.string(Item.Keys.imageURL)
+            builder.foreignId(for: Experience.self)
         }
     }
 
@@ -78,7 +88,8 @@ extension Item: JSONConvertible {
     convenience init(json: JSON) throws {
         self.init(
             message: try json.get(Item.Keys.message),
-            imageURL: try json.get(Item.Keys.imageURL)
+            imageURL: try json.get(Item.Keys.imageURL),
+            ownerId: try json.get(Item.Keys.ownerId)
         )
     }
 
@@ -87,6 +98,7 @@ extension Item: JSONConvertible {
         try json.set(Item.Keys.id, id)
         try json.set(Item.Keys.message, message)
         try json.set(Item.Keys.imageURL, imageURL)
+        try json.set(Item.Keys.ownerId, ownerId)
         return json
     }
 }
@@ -115,14 +127,5 @@ extension Item: Updateable {
                 item.imageURL = imageURL
             }
         ]
-    }
-}
-
-extension Item {
-
-    static let experienceID: Identifier
-
-    var owner: Parent<Item, Experience> {
-        return parent(id: experienceID)
     }
 }

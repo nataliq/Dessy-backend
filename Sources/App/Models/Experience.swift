@@ -16,8 +16,13 @@ final class Experience: Model {
 
     static let idType: IdentifierType = .uuid
 
+    var items: Children<Experience, Item> {
+        return children()
+    }
+
     struct Keys {
         static let id = "id"
+        static let items = "items"
     }
 
     /// Creates a new Post
@@ -71,6 +76,7 @@ extension Experience: JSONConvertible {
     func makeJSON() throws -> JSON {
         var json = JSON()
         try json.set(Experience.Keys.id, id)
+        try json.set(Experience.Keys.items, try items.all())
         return json
     }
 }
@@ -80,11 +86,4 @@ extension Experience: JSONConvertible {
 // This allows Experience models to be returned
 // directly in route closures
 extension Experience: ResponseRepresentable { }
-
-
-extension Experience {
-    var items: Children<Experience, Item> {
-        return children()
-    }
-}
 
