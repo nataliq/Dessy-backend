@@ -1,5 +1,5 @@
 //
-//  Experience.swift
+//  Item.swift
 //  DessyPackageDescription
 //
 //  Created by Roy Marmelstein on 2018-04-22.
@@ -9,21 +9,24 @@ import Vapor
 import FluentProvider
 import HTTP
 
-final class Experience: Model {
+final class Item: Model {
     let storage = Storage()
 
     // MARK: Properties and database keys
 
-    var itemUUIDS: [String]
+    var message: String
+    var imageURL: String
 
     struct Keys {
         static let id = "id"
-        static let itemUUIDS = "itemuuids"
+        static let message = "message"
+        static let imageURL = "imageURL"
     }
 
     /// Creates a new Post
-    init(itemUUIDS: [String]) {
-        self.itemUUIDS = itemUUIDS
+    init(message: String, imageURL: String) {
+        self.message = message
+        self.imageURL = imageURL
     }
 
     // MARK: Fluent Serialization
@@ -31,26 +34,29 @@ final class Experience: Model {
     /// Initializes the Post from the
     /// database row
     init(row: Row) throws {
-        itemUUIDS = try row.get(Experience.Keys.itemUUIDS)
+        message = try row.get(Item.Keys.message)
+        imageURL = try row.get(Item.Keys.imageURL)
     }
 
     // Serializes the Post to the database
     func makeRow() throws -> Row {
         var row = Row()
-        try row.set(Experience.Keys.itemUUIDS, itemUUIDS)
+        try row.set(Item.Keys.message, message)
+        try row.set(Item.Keys.imageURL, imageURL)
         return row
     }
 }
 
 // MARK: Fluent Preparation
 
-extension Experience: Preparation {
+extension Item: Preparation {
     /// Prepares a table/collection in the database
     /// for storing Posts
     static func prepare(_ database: Database) throws {
         try database.create(self) { builder in
             builder.id()
-            builder.string(Experience.Keys.itemUUIDS)
+            builder.string(Item.Keys.message)
+            builder.string(Item.Keys.imageURL)
         }
     }
 
@@ -64,45 +70,49 @@ extension Experience: Preparation {
 
 // How the model converts from / to JSON.
 // For example when:
-//     - Creating a new Post (POST /Experience)
-//     - Fetching a post (GET /Experience, GET /Experience/:id)
+//     - Creating a new Post (POST /Item)
+//     - Fetching a post (GET /Item, GET /Item/:id)
 //
-extension Experience: JSONConvertible {
+extension Item: JSONConvertible {
     convenience init(json: JSON) throws {
         self.init(
-            itemUUIDS: try json.get(Experience.Keys.itemUUIDS)
+            message: try json.get(Item.Keys.message),
+            imageURL: try json.get(Item.Keys.imageURL)
         )
     }
 
     func makeJSON() throws -> JSON {
         var json = JSON()
-        try json.set(Experience.Keys.id, id)
-        try json.set(Experience.Keys.itemUUIDS, itemUUIDS)
+        try json.set(Item.Keys.id, id)
+        try json.set(Item.Keys.message, message)
+        try json.set(Item.Keys.imageURL, imageURL)
         return json
     }
 }
 
 // MARK: HTTP
 
-// This allows Experience models to be returned
+// This allows Item models to be returned
 // directly in route closures
-extension Experience: ResponseRepresentable { }
+extension Item: ResponseRepresentable { }
 
 // MARK: Update
 
-// This allows the Experience model to be updated
+// This allows the Item model to be updated
 // dynamically by the request.
-extension Experience: Updateable {
+extension Item: Updateable {
     // Updateable keys are called when `post.update(for: req)` is called.
     // Add as many updateable keys as you like here.
-    public static var updateableKeys: [UpdateableKey<Experience>] {
+    public static var updateableKeys: [UpdateableKey<Item>] {
         return [
             // If the request contains a String at key "content"
             // the setter callback will be called.
-            UpdateableKey(Experience.Keys.itemUUIDS, [String].self) { experience, itemUUIDS in
-                experience.itemUUIDS = itemUUIDS
+            UpdateableKey(Item.Keys.message, String.self) { item, message in
+                item.message = message
+            },
+            UpdateableKey(Item.Keys.imageURL, String.self) { item, imageURL in
+                item.imageURL = imageURL
             }
         ]
     }
 }
-

@@ -33,6 +33,8 @@
 /* Begin PBXBuildFile section */
 		34D5A824208C99B1009AB81D /* Experience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5A823208C99B1009AB81D /* Experience.swift */; };
 		34D5A827208C99D9009AB81D /* Experience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5A823208C99B1009AB81D /* Experience.swift */; };
+		34D5A82A208C9CAD009AB81D /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5A829208C9CAD009AB81D /* Item.swift */; };
+		34D5A82B208C9ECE009AB81D /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D5A829208C9CAD009AB81D /* Item.swift */; };
 		OBJ_1018 /* PostControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_22 /* PostControllerTests.swift */; };
 		OBJ_1019 /* RouteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_23 /* RouteTests.swift */; };
 		OBJ_1020 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_24 /* Utilities.swift */; };
@@ -3554,6 +3556,7 @@
 
 /* Begin PBXFileReference section */
 		34D5A823208C99B1009AB81D /* Experience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Experience.swift; sourceTree = "<group>"; };
+		34D5A829208C9CAD009AB81D /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		"BCrypt::BCrypt::Product" /* BCrypt.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BCrypt.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Bits::Bits::Product" /* Bits.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Bits.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Console::Console::Product" /* Console.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Console.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -4797,6 +4800,7 @@
 			children = (
 				OBJ_12 /* Post.swift */,
 				34D5A823208C99B1009AB81D /* Experience.swift */,
+				34D5A829208C9CAD009AB81D /* Item.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -8167,6 +8171,7 @@
 				OBJ_1163 /* Post.swift in Sources */,
 				OBJ_1164 /* Routes.swift in Sources */,
 				34D5A827208C99D9009AB81D /* Experience.swift in Sources */,
+				34D5A82B208C9ECE009AB81D /* Item.swift in Sources */,
 				OBJ_1165 /* Config+Setup.swift in Sources */,
 				OBJ_1166 /* Droplet+Setup.swift in Sources */,
 			);
@@ -8938,6 +8943,7 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_798 /* Package.swift in Sources */,
+				34D5A82A208C9CAD009AB81D /* Item.swift in Sources */,
 				34D5A824208C99B1009AB81D /* Experience.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
