@@ -18,8 +18,12 @@ extension Droplet {
             return req.description
         }
 
-        get("description") { req in return req.description }
-        
+        get("exp") { req in
+            let id = req.query?["id"]?.int
+            return req.description
+        }
+
+
         try resource("posts", PostController.self)
     }
 }
