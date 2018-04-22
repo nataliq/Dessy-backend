@@ -1,4 +1,5 @@
 import Vapor
+import HTTP
 
 extension Droplet {
     func setupRoutes() throws {
@@ -8,17 +9,22 @@ extension Droplet {
             return json
         }
 
-        get("exp") { req in
+        get("experience") { req in
             let id = req.query?["id"]?.int ?? 0
             let experience = try Experience.find(id)
             if let json = try experience?.makeJSON() {
                 return json
             } else {
-                return "Error"
+                throw Abort(.notFound)
             }
         }
 
-        get("createfake") { req in
+        get("allExp") { req in
+            let experiences = try Experience.all()
+            return try experiences.makeJSON()
+        }
+
+        get("democreate") { req in
             let experience = Experience()
             try? experience.save()
             let identifier = experience.id ?? Identifier.null
@@ -33,7 +39,7 @@ extension Droplet {
             catch {
                 print("something is wrong")
             }
-            return "fake id \(identifier.string)"
+            return "id \(identifier.int ?? 0)"
         }
 
     }
